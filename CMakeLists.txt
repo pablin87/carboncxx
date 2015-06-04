@@ -1,4 +1,4 @@
-PROJECT(Carbon-C++-Library CXX)
+PROJECT(Carbon-C++-Library)
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 

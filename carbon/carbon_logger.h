@@ -55,7 +55,7 @@ private:
     MetricMap metrics_;
 
     //thread_local needs gcc 4.8.0 or higgher
-    thread_local MetricMap metrics_cache_;
+    static thread_local MetricMap metrics_cache_;
     //MetricMap metrics_cache_;
 
     float dump_interval_;
