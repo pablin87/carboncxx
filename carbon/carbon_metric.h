@@ -28,6 +28,7 @@ public:
     void increase(double value = 1.0);
 
     class MetricData{
+    public:
         double value;
         std::chrono::duration<double> timestamp;
     };

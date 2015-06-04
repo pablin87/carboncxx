@@ -9,14 +9,14 @@
 #include <cmath>
 
 CarbonMetric::CarbonMetric(const std::string & path, int precission)
-:precission_(precission), path_(path)
+:path_(path), precission_(precission)
 {
     time_since_epoc_ = std::chrono::system_clock::now().time_since_epoch();
 }
 
 CarbonMetric::~CarbonMetric() { }
 
-void CarbonMetric::increase(double value = 1.0)
+void CarbonMetric::increase(double value)
 {
     long new_val = std::round(value * precission_);
     value_.fetch_add(new_val);

@@ -31,18 +31,18 @@ CarbonLogger::get_metric(const std::string & metric)
     auto it_local = metrics_cache_.find(metric);
     if (it_local != metrics_cache_.end()) {
         // We found the metric in the local thread cache. Just return it.
-        ret = *it_local;
+        ret = it_local->second;
     } else {
         // We do not have the metric in the local thread cache. Check if it
         // exists in the global metric map.
         {
-            std::lock_guard lock(metrics_mutex_);
+            std::lock_guard<std::mutex> lock(metrics_mutex_);
             auto it_global = metrics_.find(metric);
             if (it_global != metrics_.end()){
                 // The metric already exists in the global map. Then, add it to
                 // the local thread cache and return it.
-                metrics_cache_[metric] = *it_global;
-                ret = *it_global;
+                metrics_cache_[metric] = it_global->second;
+                ret = it_global->second;
             } else {
                 // The metric does not exist in the global metrics. Then add the
                 // metric to the global and local map and return it.
@@ -50,7 +50,7 @@ CarbonLogger::get_metric(const std::string & metric)
                                                                   precission_);
                 metrics_cache_[metric] = metrics_[metric];
                 {
-                    std::lock_guard(all_metrics_mutex_);
+                    std::lock_guard<std::mutex> lock1(all_metrics_mutex_);
                     all_metrics_.push_back(metric);
                 }
             }
@@ -82,6 +82,7 @@ CarbonLogger::log_duration(const std::string& path, double timelapse)
 void
 CarbonLogger::do_dump()
 {
+    using namespace std::chrono;
     // Get all metrics...
     all_metrics_mutex_.lock();
     std::vector<std::string> all_metrics(all_metrics_);
@@ -92,8 +93,8 @@ CarbonLogger::do_dump()
         std::shared_ptr<CarbonMetric> metric = get_metric(path);
         CarbonMetric::MetricData metric_data = metric->get_and_reset();
         std::stringstream ss;
-        ss << prefix_ << "." << path << "\t" << metric_data.value
-           << "\t" << metric_data.timestamp;
+        ss << prefix_ << "." << path << "\t" << metric_data.value << "\t"
+           << duration_cast<milliseconds>(metric_data.timestamp).count();
         send_to_carbon(ss.str());
     }
 }
@@ -116,7 +117,7 @@ CarbonLogger::run_dumping_thread()
 
         while(continue_dumping_){
             auto start = std::chrono::high_resolution_clock::now();
-            std::chrono::duration elapsed(0);
+            std::chrono::duration<double> elapsed(0);
 
             // Little hack to check the continue_dumping_ flag more often.
             do {
