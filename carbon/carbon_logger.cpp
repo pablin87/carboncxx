@@ -22,14 +22,24 @@ CarbonLogger::CarbonLogger(const std::string & prefix,
 
 CarbonLogger::~CarbonLogger() { }
 
+CarbonLogger::MetricMap &
+CarbonLogger::get_metrics_cache()
+{
+    if ( metrics_cache_.get() == nullptr){
+        metrics_cache_.reset(new MetricMap());
+    }
+    return *metrics_cache_.get();
+}
+
 std::shared_ptr<CarbonMetric>
 CarbonLogger::get_metric(const std::string & metric)
 {
     std::shared_ptr<CarbonMetric> ret(NULL);
 
+    MetricMap & metrics_cache = get_metrics_cache();
     // First, check if we have the reference in the local thread cache
-    auto it_local = metrics_cache_.find(metric);
-    if (it_local != metrics_cache_.end()) {
+    auto it_local = metrics_cache.find(metric);
+    if (it_local != metrics_cache.end()) {
         // We found the metric in the local thread cache. Just return it.
         ret = it_local->second;
     } else {
@@ -41,14 +51,14 @@ CarbonLogger::get_metric(const std::string & metric)
             if (it_global != metrics_.end()){
                 // The metric already exists in the global map. Then, add it to
                 // the local thread cache and return it.
-                metrics_cache_[metric] = it_global->second;
+                metrics_cache[metric] = it_global->second;
                 ret = it_global->second;
             } else {
                 // The metric does not exist in the global metrics. Then add the
                 // metric to the global and local map and return it.
                 metrics_[metric] = std::make_shared<CarbonMetric>(metric,
                                                                   precission_);
-                metrics_cache_[metric] = metrics_[metric];
+                metrics_cache[metric] = metrics_[metric];
                 {
                     std::lock_guard<std::mutex> lock1(all_metrics_mutex_);
                     all_metrics_.push_back(metric);

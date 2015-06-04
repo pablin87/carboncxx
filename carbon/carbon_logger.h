@@ -14,6 +14,8 @@
 #include <mutex>
 #include <thread>
 
+#include "boost/thread.hpp"
+
 #include "carbon_connection.h"
 #include "carbon_metric.h"
 
@@ -48,6 +50,8 @@ private:
 
     typedef std::map<std::string, std::shared_ptr<CarbonMetric>> MetricMap;
 
+    MetricMap & get_metrics_cache();
+
     std::vector<std::shared_ptr<CarbonConnection>> carbon_connections_;
 
     std::mutex metrics_mutex_;
@@ -55,8 +59,8 @@ private:
     MetricMap metrics_;
 
     //thread_local needs gcc 4.8.0 or higgher
-    static thread_local MetricMap metrics_cache_;
-    //MetricMap metrics_cache_;
+
+    boost::thread_specific_ptr<MetricMap> metrics_cache_;
 
     float dump_interval_;
 
