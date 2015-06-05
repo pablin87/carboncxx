@@ -43,7 +43,7 @@ void CarbonConnection::connect()
 
     if (ec)
     {
-      throw std::runtime_error("Error when connectin to carbon " +
+      throw std::runtime_error("Error when connecting to carbon " +
                                 ec.message());
     }
     connected_ = true;

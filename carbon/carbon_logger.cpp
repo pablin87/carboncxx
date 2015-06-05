@@ -20,7 +20,12 @@ CarbonLogger::CarbonLogger(const std::string & prefix,
 
 }
 
-CarbonLogger::~CarbonLogger() { }
+CarbonLogger::~CarbonLogger()
+{
+    for ( auto con : carbon_connections_){
+        con->disconnect();
+     }
+}
 
 CarbonLogger::CarbonLogger( CarbonLogger && cl)
 :carbon_connections_(std::move(cl.carbon_connections_)),
