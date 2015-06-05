@@ -22,9 +22,13 @@ public:
 
     virtual ~CarbonConnection();
 
-    void sendLine(const std::string & line);
+    virtual void sendLine(const std::string & line);
 
-    void connect();
+    virtual void connect();
+
+    virtual void disconnect();
+
+    virtual bool is_connected();
 
 private:
 
@@ -35,6 +39,8 @@ private:
     boost::asio::io_service & io_bservice_;
 
     boost::asio::ip::tcp::socket socket_;
+
+    bool connected_;
 };
 
 #endif /* CARBON_CONNECTION_H_ */

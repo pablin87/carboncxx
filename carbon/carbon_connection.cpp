@@ -9,12 +9,17 @@
 
 CarbonConnection::CarbonConnection(const std::string & host, int port,
         boost::asio::io_service & io_bservice):
-        ip_(host), port_(port), io_bservice_(io_bservice), socket_(io_bservice_)
+        ip_(host), port_(port), io_bservice_(io_bservice),
+        socket_(io_bservice_), connected_(true)
 {
 
 }
 
-CarbonConnection::~CarbonConnection() { }
+CarbonConnection::~CarbonConnection()
+{
+    // try to close socket
+    disconnect();
+}
 
 
 void CarbonConnection::sendLine(const std::string & line)
@@ -41,5 +46,18 @@ void CarbonConnection::connect()
       throw std::runtime_error("Error when connectin to carbon " +
                                 ec.message());
     }
+    connected_ = true;
 
+}
+
+void CarbonConnection::disconnect()
+{
+    if ( connected_ ) socket_.close();
+    connected_ = false;
+}
+
+
+bool CarbonConnection::is_connected()
+{
+    return connected_;
 }

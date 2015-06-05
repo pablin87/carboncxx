@@ -9,7 +9,7 @@
 #include <cmath>
 
 CarbonMetric::CarbonMetric(const std::string & path, int precission)
-:path_(path), precission_(precission)
+:path_(path), value_(0),precission_(precission)
 {
     time_since_epoc_ = std::chrono::system_clock::now().time_since_epoch();
 }

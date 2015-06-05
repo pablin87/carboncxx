@@ -22,6 +22,13 @@ CarbonLogger::CarbonLogger(const std::string & prefix,
 
 CarbonLogger::~CarbonLogger() { }
 
+CarbonLogger::CarbonLogger( CarbonLogger && cl)
+:carbon_connections_(std::move(cl.carbon_connections_)),
+ metrics_(std::move(cl.metrics_)), dump_interval_(cl.dump_interval_),
+ precission_(cl.precission_), continue_dumping_(false),
+ all_metrics_(cl.all_metrics_),prefix_(cl.prefix_)
+{ }
+
 CarbonLogger::MetricMap &
 CarbonLogger::get_metrics_cache()
 {
@@ -63,6 +70,7 @@ CarbonLogger::get_metric(const std::string & metric)
                     std::lock_guard<std::mutex> lock1(all_metrics_mutex_);
                     all_metrics_.push_back(metric);
                 }
+                ret = metrics_[metric];
             }
         } // unlock mutex
     }
@@ -103,7 +111,8 @@ CarbonLogger::do_dump()
         std::shared_ptr<CarbonMetric> metric = get_metric(path);
         CarbonMetric::MetricData metric_data = metric->get_and_reset();
         std::stringstream ss;
-        ss << prefix_ << "." << path << "\t" << metric_data.value << "\t"
+        if (prefix_.size() != 0) ss << prefix_ << ".";
+        ss <<  path << " " << metric_data.value << " "
            << duration_cast<milliseconds>(metric_data.timestamp).count();
         send_to_carbon(ss.str());
     }
@@ -112,8 +121,11 @@ CarbonLogger::do_dump()
 void
 CarbonLogger::send_to_carbon(const std::string & line)
 {
+    if (carbon_connections_.size() == 0 ) {
+        throw std::runtime_error("No carbon connections to send data to");
+    }
     int instance = std::rand() % carbon_connections_.size();
-    carbon_connections_[instance]->sendLine(line);
+    carbon_connections_.at(instance)->sendLine(line);
 }
 
 void
@@ -148,4 +160,12 @@ CarbonLogger::stop_dumping_thread()
 {
     continue_dumping_ = false;
     dump_thread_->join();
+}
+
+void CarbonLogger::init()
+{
+    for ( auto con : carbon_connections_){
+        if ( !con->is_connected())
+            con->connect();
+    }
 }

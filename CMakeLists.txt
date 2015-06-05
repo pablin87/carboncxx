@@ -20,7 +20,7 @@ FIND_PACKAGE(Boost COMPONENTS system unit_test_framework thread REQUIRED)
 
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 
-
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}")
 ADD_SUBDIRECTORY(carbon)
 
 #Setup CMake to run tests

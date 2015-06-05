@@ -28,6 +28,10 @@ public:
                   float dump_interval = 1.0,
                   int precission = 1000);
 
+    CarbonLogger( CarbonLogger && cl);
+
+    void init();
+
     virtual ~CarbonLogger();
 
     void log_hit(const std::string& path);
@@ -40,9 +44,9 @@ public:
 
     void stop_dumping_thread();
 
-private:
-
     void do_dump();
+
+private:
 
     void send_to_carbon(const std::string & line);
 
