@@ -1,9 +1,4 @@
-/*
- * test_carbon_logger.cpp
- *
- *  Created on: 05/06/2015
- *      Author: pablin
- */
+
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE "CARBONLOGGER"
 
@@ -13,8 +8,8 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include "carbon/carbon_logger.h"
-#include "test/mock_carbon_connection.h"
+#include "carboncxx/carbon_logger.h"
+#include "mock_carbon_connection.h"
 
 CarbonLogger
 create_mock_carbon_logger(const std::string & pref,

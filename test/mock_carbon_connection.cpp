@@ -1,9 +1,3 @@
-/*
- * MockCarbonConnection.cpp
- *
- *  Created on: 05/06/2015
- *      Author: pablin
- */
 
 #include "mock_carbon_connection.h"
 

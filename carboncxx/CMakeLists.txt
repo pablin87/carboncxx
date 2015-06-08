@@ -4,3 +4,7 @@ ADD_LIBRARY(carboncxx
 
 TARGET_LINK_LIBRARIES( carboncxx
                        pthread ${Boost_LIBRARIES} )
+                       
+INSTALL(TARGETS carboncxx DESTINATION lib)
+
+INSTALL(FILES carbon_connection.h carbon_logger.h carbon_metric.h DESTINATION include/carboncxx)

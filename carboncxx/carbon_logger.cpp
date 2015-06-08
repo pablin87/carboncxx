@@ -1,11 +1,6 @@
-/*
- * carbon_logger.cpp
- *
- *  Created on: 01/06/2015
- *      Author: pablin
- */
 
 #include "carbon_logger.h"
+
 #include <sstream>
 #include <cstdlib>
 #include <chrono>

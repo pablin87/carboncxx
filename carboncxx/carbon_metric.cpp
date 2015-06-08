@@ -1,11 +1,6 @@
-/*
- * carbon_metric.cpp
- *
- *  Created on: 01/06/2015
- *      Author: pablin
- */
 
 #include "carbon_metric.h"
+
 #include <cmath>
 
 CarbonMetric::CarbonMetric(const std::string & path, int precission)

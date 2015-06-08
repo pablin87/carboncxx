@@ -1,9 +1,3 @@
-/*
- * carbon_metric.h
- *
- *  Created on: 01/06/2015
- *      Author: pablin
- */
 
 #ifndef CARBON_METRIC_H_
 #define CARBON_METRIC_H_
@@ -17,6 +11,15 @@ class CarbonMetric {
 
 public:
 
+    /**
+     * Creates a thread safe, lock free metric for the given path.
+     * @param path of the metric
+     * @param precission. As the class internally uses an int to save the
+     * metric for thread safe reasons, we need to set the precission for the
+     * given metric. If precission is 1000, it means that the metric can save
+     * values with min values of 0,001. if for example precission is 1, the
+     * min value would be 1.
+     */
     CarbonMetric(const std::string & path, int precission=1000);
 
     virtual ~CarbonMetric();

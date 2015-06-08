@@ -1,9 +1,3 @@
-/*
- * carbon_connection.cpp
- *
- *  Created on: 01/06/2015
- *      Author: pablin
- */
 
 #include "carbon_connection.h"
 
