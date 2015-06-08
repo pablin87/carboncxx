@@ -10,7 +10,7 @@
 CarbonConnection::CarbonConnection(const std::string & host, int port,
         boost::asio::io_service & io_bservice):
         ip_(host), port_(port), io_bservice_(io_bservice),
-        socket_(io_bservice_), connected_(true)
+        socket_(io_bservice), connected_(false)
 {
 
 }

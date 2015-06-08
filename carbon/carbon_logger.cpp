@@ -118,7 +118,7 @@ CarbonLogger::do_dump()
         std::stringstream ss;
         if (prefix_.size() != 0) ss << prefix_ << ".";
         ss <<  path << " " << metric_data.value << " "
-           << duration_cast<milliseconds>(metric_data.timestamp).count();
+           << duration_cast<seconds>(metric_data.timestamp).count() << "\n";
         send_to_carbon(ss.str());
     }
 }
@@ -169,7 +169,7 @@ CarbonLogger::stop_dumping_thread()
 
 void CarbonLogger::init()
 {
-    for ( auto con : carbon_connections_){
+    for ( auto & con : carbon_connections_){
         if ( !con->is_connected())
             con->connect();
     }
