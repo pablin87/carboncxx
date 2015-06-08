@@ -1,5 +1,5 @@
 
-ADD_LIBRARY(carboncxx
+ADD_LIBRARY(carboncxx SHARED
             carbon_connection carbon_logger carbon_metric )
 
 TARGET_LINK_LIBRARIES( carboncxx
