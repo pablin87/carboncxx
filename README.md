@@ -48,11 +48,20 @@ There is a simple example where you can find how to use the library in
 test/simple_example.cpp.
 
 Tipically, you will instanciate one CarbonLogger object, and call the log_* 
-functions to log stats. Also, you will need to firt  call the init() and then
- the  run_dumping_thread() methods to make the library work.
+functions to log stats. Also, you will need to firt call the init() and then
+ the run_dumping_thread() methods to make the library work.
+ 
+To compile your probgram you will have to link against the library, so you wil 
+need to use the -lcarboncxx flag. 
+For example to compile the example program that came with the code, once you 
+have installed the library you can do as follows:
+
+```
+$>g++ simple_example.cpp -std=c++11 -lboost_system -lcarboncxx
+```
 
 ### Thread Safety
 
 Calling the method CarbonLogger -> log_hit, log_count and log_duration is thread
-safe, so you can call them from different thread at 0 risk.
+safe, so you can call them from different threads at 0 risk.
 
