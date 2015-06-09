@@ -92,9 +92,10 @@ CarbonLogger::log_count(const std::string& path, double count)
 }
 
 void
-CarbonLogger::log_duration(const std::string& path, double timelapse)
+CarbonLogger::log_average(const std::string& path, double value)
 {
-    log_count(path, timelapse);
+    std::shared_ptr<CarbonMetric> metric = get_metric(path);
+    metric->average(value);
 }
 
 void

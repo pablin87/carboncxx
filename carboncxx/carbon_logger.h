@@ -7,11 +7,26 @@
 #include <map>
 #include <mutex>
 #include <thread>
+#include <sstream>
 
 #include "boost/thread.hpp"
 
 #include "carbon_connection.h"
 #include "carbon_metric.h"
+
+#define LOG_HIT(logger, s) \
+    { \
+    std::ostringstream os; \
+    os << s; \
+    logger->log_hit(os.str()); \
+    }
+
+#define LOG_AVERAGE(logger, s, value) \
+    { \
+    std::ostringstream os; \
+    os << s; \
+    logger->log_average(os.str(), value); \
+    }
 
 class CarbonLogger {
 
@@ -72,7 +87,7 @@ public:
      * @param path metric name
      * @param timelapse time to be logged for the given metric
      */
-    void log_duration(const std::string& path, double timelapse);
+    void log_average(const std::string& path, double value);
 
     /**
      * Starts a "infinite" loop to dump all the metrics.

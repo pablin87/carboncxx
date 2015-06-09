@@ -30,6 +30,11 @@ public:
      */
     void increase(double value = 1.0);
 
+    /**
+     * Thread safe and lock-free, it averages the value of the metric
+     */
+    void average(double value);
+
     class MetricData{
     public:
         double value;
@@ -48,9 +53,13 @@ private:
 
     std::atomic_long value_;
 
+    std::atomic_long sum_;
+
     const int precission_;
 
     std::chrono::duration<double> time_since_epoc_;
+
+    bool averaged;
 
 };
 
