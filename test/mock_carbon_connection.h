@@ -3,9 +3,9 @@
 #define MOCK_CARBON_CONNECTION_H_
 
 #include <boost/asio/io_service.hpp>
-#include "carboncxx/carbon_connection_tcp.h"
+#include "carboncxx/carbon_connection.h"
 
-class MockCarbonConnection: public CarbonConnectionTCP {
+class MockCarbonConnection: public CarbonConnection {
 
 public:
 
