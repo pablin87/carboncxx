@@ -8,6 +8,6 @@ TARGET_LINK_LIBRARIES( carboncxx
                        
 INSTALL(TARGETS carboncxx DESTINATION lib)
 
-INSTALL(FILES carbon_connection_.h carbon_connection_tcp.h carbon_connection_udp.h
+INSTALL(FILES carbon_connection.h carbon_connection_tcp.h carbon_connection_udp.h
               carbon_logger.h carbon_metric.h
               DESTINATION include/carboncxx)
