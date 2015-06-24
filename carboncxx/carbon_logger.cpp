@@ -7,10 +7,11 @@
 #include <string>
 
 CarbonLogger::CarbonLogger(const std::string & prefix,
-        std::vector<std::shared_ptr<CarbonConnection>> cons,
+        std::vector<std::shared_ptr<CarbonConnection>> cons, bool use_udp,
         float dump_interval, int precission)
 :carbon_connections_(cons), dump_interval_(dump_interval),
- precission_(precission), continue_dumping_(false), prefix_(prefix)
+ precission_(precission), continue_dumping_(false), prefix_(prefix),
+ use_udp_(use_udp)
 {
 
 }
@@ -26,7 +27,7 @@ CarbonLogger::CarbonLogger( CarbonLogger && cl)
 :carbon_connections_(std::move(cl.carbon_connections_)),
  metrics_(std::move(cl.metrics_)), dump_interval_(cl.dump_interval_),
  precission_(cl.precission_), continue_dumping_(false),
- all_metrics_(cl.all_metrics_),prefix_(cl.prefix_)
+ all_metrics_(cl.all_metrics_),prefix_(cl.prefix_), use_udp_(cl.use_udp_)
 { }
 
 CarbonLogger::MetricMap &
@@ -132,7 +133,7 @@ CarbonLogger::send_to_carbon(const std::string & line)
 void
 CarbonLogger::run_dumping_thread()
 {
-    dump_thread_ = std::make_shared<std::thread>([this]{
+    dump_thread_ = std::make_shared<std::thread>([this]() noexcept {
         continue_dumping_ = true;
         int tmp_milliseconds = dump_interval_ * 1000;
         std::chrono::milliseconds interval(tmp_milliseconds);

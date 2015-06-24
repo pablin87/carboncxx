@@ -1,11 +1,12 @@
 
-#ifndef CARBON_CONNECTION_H_
-#define CARBON_CONNECTION_H_
+#ifndef CARBONCXX_CARBON_CONNECTION_H_
+#define CARBONCXX_CARBON_CONNECTION_H_
 
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <string>
 #include <iostream>
+
 
 class CarbonConnection {
 
@@ -26,25 +27,30 @@ public:
      * Send a string line throw the wire.
      * @param line it must have the "\n" at the end
      */
-    virtual void sendLine(const std::string & line);
+    virtual void sendLine(const std::string & line) = 0;
 
     /**
-     * Do the tcp connect.
+     * Connect to carbon cache.
      */
-    virtual void connect();
+    virtual void connect() = 0;
 
     /**
-     * Do the tcp disconnect (aka close the socket).
+     * Disconnect from carbon cache.
      */
-    virtual void disconnect();
+    virtual void disconnect() = 0;
 
     /**
      * Check if the instance is connected.
      * @return
      */
-    virtual bool is_connected();
+    virtual bool is_connected() = 0;
 
-private:
+    /**
+     * return the ip:port of the carbon instance it is connected to.
+     */
+    std::string fancy_name();
+
+protected:
 
     std::string ip_;
 
@@ -52,9 +58,6 @@ private:
 
     boost::asio::io_service & io_bservice_;
 
-    boost::asio::ip::tcp::socket socket_;
-
-    bool connected_;
 };
 
-#endif /* CARBON_CONNECTION_H_ */
+#endif /* CARBONCXX_CARBON_CONNECTION_H_ */

@@ -4,7 +4,7 @@
 boost::asio::io_service MockCarbonConnection::ios_;
 
 MockCarbonConnection::MockCarbonConnection()
-:CarbonConnection("", 0, ios_) { }
+:CarbonConnectionTCP("", 0, ios_) { }
 
 MockCarbonConnection::~MockCarbonConnection() { }
 

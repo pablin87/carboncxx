@@ -44,6 +44,7 @@ public:
      */
     CarbonLogger(const std::string & prefix,
                   std::vector<std::shared_ptr<CarbonConnection>> cons,
+                  bool use_udp = false,
                   float dump_interval = 1.0,
                   int precission = 1000);
 
@@ -159,6 +160,8 @@ private:
     std::shared_ptr<std::thread> dump_thread_;
 
     std::string prefix_;
+
+    bool use_udp_;
 
 };
 

@@ -16,7 +16,8 @@ FIND_PACKAGE(Threads)
 SET(Boost_USE_MULTITHREADED ON)  
 #SET(Boost_USE_STATIC_RUNTIME ON) 
 
-FIND_PACKAGE(Boost COMPONENTS system unit_test_framework thread REQUIRED)
+FIND_PACKAGE(Boost COMPONENTS system unit_test_framework thread 
+                              program_options REQUIRED)
 
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 
