@@ -42,6 +42,8 @@ protected:
 
     boost::asio::ip::udp::socket socket_;
 
+    boost::asio::ip::udp::endpoint endpoint_;
+
     bool connected_;
 
 };

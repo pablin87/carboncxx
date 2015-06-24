@@ -21,15 +21,7 @@ void CarbonConnectionUDP::sendLine(const std::string & line)
 {
     namespace ba = boost::asio;
 
-    try {
-        socket_.send(ba::buffer(line.c_str(), line.length()));
-    } catch (boost::system::system_error& e) {
-        const boost::system::error_code& ec = e.code();
-        std::ostringstream ss;
-        ss << "Error when sending data to carbon " << fancy_name()
-            << " : " << ec.message() << " (" << ec.value() << ")";
-        throw std::runtime_error( ss.str());
-    }
+    socket_.send_to(ba::buffer(line.c_str(), line.length()), endpoint_);
 }
 
 void CarbonConnectionUDP::connect()
@@ -37,9 +29,10 @@ void CarbonConnectionUDP::connect()
     using namespace boost::asio::ip;
 
     udp::endpoint endpoint( address::from_string(ip_), port_);
-
+    endpoint_ = endpoint;
     boost::system::error_code ec;
-    socket_.connect(endpoint, ec);
+    socket_.open(udp::v4(), ec);
+
     if (ec){
         std::ostringstream ss;
         ss << "Error when connecting to carbon " << fancy_name()
