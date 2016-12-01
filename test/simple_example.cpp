@@ -13,12 +13,12 @@ volatile std::atomic_bool flag;
 
 void sigint(int a)
 {
-    flag = true;
+    flag.store(true);
 }
 
 int main(int argc, char **argv)
 {
-    flag = false;
+    flag.store(false);
     signal(SIGINT, sigint);
 
     namespace po = boost::program_options;
