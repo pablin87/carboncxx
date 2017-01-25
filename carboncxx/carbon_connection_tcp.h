@@ -44,6 +44,12 @@ public:
 
 protected:
 
+    /**
+     * Helpper function to resolve host/ip  port to and endpoint
+     */
+    boost::asio::ip::tcp::endpoint
+    resolve_endpoint(const std::string & host, int port);
+
     boost::asio::ip::tcp::socket socket_;
 
     bool connected_;

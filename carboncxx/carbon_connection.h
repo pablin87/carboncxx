@@ -52,7 +52,7 @@ public:
 
 protected:
 
-    std::string ip_;
+    std::string host_;
 
     int port_;
 

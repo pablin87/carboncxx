@@ -40,6 +40,13 @@ public:
 
 protected:
 
+    /**
+     * Helpper function to resolve host/ip  port to and endpoint
+     */
+    boost::asio::ip::udp::endpoint
+    resolve_endpoint(const std::string & host, int port);
+
+
     boost::asio::ip::udp::socket socket_;
 
     boost::asio::ip::udp::endpoint endpoint_;

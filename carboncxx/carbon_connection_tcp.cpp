@@ -1,6 +1,8 @@
 
+#include <string>
 #include <boost/asio.hpp>
 #include <boost/asio/error.hpp>
+#include <boost/asio/ip/tcp.hpp>
 #include "carbon_connection_tcp.h"
 
 CarbonConnectionTCP::CarbonConnectionTCP(const std::string & host, int port,
@@ -28,11 +30,22 @@ void CarbonConnectionTCP::sendLine(const std::string & line)
     }
 }
 
+boost::asio::ip::tcp::endpoint CarbonConnectionTCP::
+resolve_endpoint(const std::string & host, int port)
+{
+	std::string str_port = std::to_string(port);
+	boost::asio::ip::tcp::resolver resolver(io_bservice_);
+	boost::asio::ip::tcp::resolver::query query(host, str_port);
+	boost::asio::ip::tcp::resolver::iterator iter = resolver.resolve(query);
+
+	return iter->endpoint();
+}
+
 void CarbonConnectionTCP::connect()
 {
     using namespace boost::asio::ip;
 
-    tcp::endpoint endpoint( address::from_string(ip_), port_);
+    tcp::endpoint endpoint = resolve_endpoint(host_, port_);
     boost::system::error_code ec;
     socket_.connect(endpoint, ec);
     if (ec){

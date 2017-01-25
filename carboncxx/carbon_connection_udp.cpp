@@ -1,7 +1,8 @@
 
+#include <string>
 #include <boost/asio.hpp>
 #include <boost/asio/error.hpp>
-
+#include <boost/asio/ip/udp.hpp>
 #include "carbon_connection_udp.h"
 
 
@@ -24,11 +25,23 @@ void CarbonConnectionUDP::sendLine(const std::string & line)
     socket_.send_to(ba::buffer(line.c_str(), line.length()), endpoint_);
 }
 
+boost::asio::ip::udp::endpoint CarbonConnectionUDP::
+resolve_endpoint(const std::string & host, int port)
+{
+	std::string str_port = std::to_string(port);
+	boost::asio::ip::udp::resolver resolver(io_bservice_);
+	boost::asio::ip::udp::resolver::query query(host, str_port);
+	boost::asio::ip::udp::resolver::iterator iter = resolver.resolve(query);
+
+	return iter->endpoint();
+}
+
+
 void CarbonConnectionUDP::connect()
 {
     using namespace boost::asio::ip;
 
-    udp::endpoint endpoint( address::from_string(ip_), port_);
+    udp::endpoint endpoint = resolve_endpoint(host_, port_);
     endpoint_ = endpoint;
     boost::system::error_code ec;
     socket_.open(udp::v4(), ec);
